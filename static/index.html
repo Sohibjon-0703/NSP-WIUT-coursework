@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NSP Workload, KPI & Retention module - high-fidelity prototype</title>
+<style>
+:root{--ink:#1c2b2a;--mut:#62726f;--bg:#f2f5f3;--card:#fff;--line:#d6dfdb;--pri:#0e5a4b;--pri2:#e1f0ec;--warn:#b57300;--warn2:#fdf1d6;--bad:#a8281e;--bad2:#fbe3e0;--ok:#25703f;--ok2:#dff1e5}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 "Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+header{display:flex;align-items:center;gap:16px;padding:10px 20px;background:var(--pri);color:#fff}
+header b{font-size:16px}header small{opacity:.8}header .sp{flex:1}
+header select{padding:6px 8px;border-radius:6px;border:0;font:inherit}
+.wrap{display:flex;min-height:calc(100vh - 52px)}
+nav{width:200px;background:#fff;border-right:1px solid var(--line);padding:12px 8px}
+nav button{display:block;width:100%;text-align:left;padding:9px 12px;margin-bottom:4px;border:0;border-radius:6px;background:none;font:inherit;color:var(--ink);cursor:pointer}
+nav button.on{background:var(--pri2);color:var(--pri);font-weight:600}nav button:hover{background:var(--bg)}
+main{flex:1;padding:20px 24px;max-width:1100px}
+h2{margin:0 0 4px;font-size:20px}.sub{color:var(--mut);margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:1fr 1fr}.g4{grid-template-columns:repeat(4,1fr)}
+.tile{padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:#fff}.tile b{font-size:26px;display:block}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+th{font-weight:600;color:var(--mut);font-size:12px}tr.row{cursor:pointer}tr.row:hover{background:var(--bg)}tr.sel{background:var(--pri2)}
+.btn{padding:8px 14px;border-radius:6px;border:1px solid var(--pri);background:var(--pri);color:#fff;font:inherit;cursor:pointer}
+.btn.alt{background:#fff;color:var(--pri)}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.bad{background:#fff;color:var(--bad);border-color:var(--bad)}
+input,select{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+label{display:block;font-size:12px;color:var(--mut);margin:8px 0 3px}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.High,.bad{background:var(--bad2);color:var(--bad)}.Medium,.warn{background:var(--warn2);color:var(--warn)}.Low,.ok{background:var(--ok2);color:var(--ok)}
+.msg{padding:12px 14px;border-radius:8px;margin-top:12px;border-left:5px solid}.msg.ok{border-color:var(--ok)}.msg.bad{border-color:var(--bad)}.msg.warn{border-color:var(--warn)}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;min-width:70px}.bar i{display:block;height:100%;background:var(--pri)}
+.seg button{padding:5px 9px;border:1px solid var(--line);background:#fff;font:inherit;cursor:pointer;margin-right:-1px}
+.seg button.on{background:var(--pri);color:#fff;border-color:var(--pri)}.seg button.on.A{background:var(--bad);border-color:var(--bad)}.seg button.on.E{background:var(--warn);border-color:var(--warn)}
+.qr{text-align:center}.qr canvas{border:8px solid #fff;outline:1px solid var(--line);width:200px;height:200px;image-rendering:pixelated}
+.tablet{background:#222;border-radius:14px;padding:14px;color:#fff;text-align:center}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:#fff;padding:12px 16px;border-radius:8px;max-width:360px;display:none;z-index:9}
+.muted{color:var(--mut)}.hl{background:var(--bad2)}
+@media(max-width:800px){.g2,.g4{grid-template-columns:1fr}nav{width:100%}.wrap{flex-direction:column}}
+</style></head><body>
+<header><b>NSP Learning Centre</b><small>Teacher Workload, KPI &amp; Retention module (EduTizim)</small><span class="sp"></span>
+<button class="btn alt" style="padding:4px 10px" onclick="resetDemo()">Reset demo data</button><span id="who"></span><select id="role" onchange="setRole(this.value)" aria-label="Sign in as"></select></header>
+<div class="wrap"><nav id="nav"></nav><main id="main"></main></div><div class="toast" id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),SUBJ=['Chemistry','Biology','English'];
+const LBL={results:'Test & mock results',attendance:'Student attendance',punctuality:'Punctuality',retention:'Retention',feedback:'Student feedback',rating:'Head Specialist rating',achievements:'Achievements'};
+const KEYS=Object.keys(LBL);let weights={results:25,attendance:10,punctuality:10,retention:20,feedback:20,rating:10,achievements:5};
+const mk=(id,name,subj,role,a,r,pl,wk,late,miss)=>({id,name,subj,role,pl,wk,late,miss,
+ prev:{results:a[0],attendance:a[1],punctuality:a[2],retention:a[3],feedback:a[4],rating:r*10,achievements:a[5]},
+ cur:{results:a[0]==null?null:a[0]+2,attendance:a[1]+1,punctuality:a[2],retention:a[3]-1,feedback:a[4]+1,rating:null,achievements:a[5]}});
+const T=[mk(1,'Dilnoza Karimova','Chemistry','Main',[80,89,94,86,82,70],8,84,88,1,0),mk(2,'Jasur Rakhimov','Biology','Main',[74,82,76,70,68,40],7,80,79,4,1),
+ mk(3,'Malika Yusupova','English','Main',[88,92,100,94,91,90],9,88,93,0,0),mk(4,'Sardor Abdullaev','English','Main',[79,85,88,80,77,95],8,86,86,2,0),
+ mk(5,'Nodira Sattorova','Chemistry','Support',[null,90,92,84,80,50],8,40,42,0,0),mk(6,'Bobur Ismoilov','Biology','Support',[null,78,81,66,72,30],6,38,36,3,2)];
+const S=[[1,'Aziza Nurmatova','Chemistry','Chem DTM-A',1,2,0,0,''],[2,'Timur Olimov','Chemistry','Chem DTM-A',1,0,0,0,''],[3,'Madina Qodirova','Chemistry','Chem DTM-A',1,1,0,0,''],
+ [4,'Shahzod Matyaqubov','Chemistry','Chem DTM-A',1,0,0,0,''],[5,'Zarina Hasanova','Chemistry','Chem DTM-A',1,0,0,0,''],[6,'Akmal Rustamov','Chemistry','Chem DTM-A',1,0,0,0,''],
+ [7,'Laylo Davletova','Biology','Bio DTM-B',2,3,1,0,'Parent reported job loss'],[8,'Otabek Jalilov','Biology','Bio DTM-B',2,0,1,0,''],[9,'Kamola Ergasheva','English','IELTS-C',3,0,1,.6,''],
+ [10,'Behruz Sobirov','English','IELTS-D',4,1,0,0,''],[11,'Gulnoza Aminova','English','IELTS-D',4,0,0,0,''],[12,'Rustam Polvonov','Biology','Bio DTM-B',6,0,1,0,'']]
+ .map(a=>({id:a[0],name:a[1],subj:a[2],grp:a[3],tid:a[4],abs:a[5],debt:a[6],neg:a[7],circ:a[8],st:'active'}));
+S.push({id:13,name:'Sevara Karimova',subj:'Biology',grp:'Bio DTM-B',tid:2,abs:0,debt:0,neg:0,circ:'',st:'withdrawn'},{id:14,name:'Doniyor Aliev',subj:'English',grp:'IELTS-C',tid:3,abs:0,debt:0,neg:0,circ:'',st:'withdrawn'});
+const alerts=[{sid:7,why:'3 consecutive absences; financial circumstance recorded',st:'Open',act:null}];
+const users={Teacher:'Dilnoza Karimova',Administrator:'Gulbahor Tashpulatova','Head Specialist':'Rustam Saidov',Director:'Otabek Maksudov'};
+const NAV={Teacher:[['checkin','Check in / out'],['register','Lesson register']],Administrator:[['admin','Manual attendance & marketing'],['risk','Dropout risk']],
+ 'Head Specialist':[['weights','KPI weights & ratings'],['kpi','Teacher KPI']],Director:[['risk','Dropout risk'],['kpi','Teacher KPI'],['workload','Workload report'],['retention','Retention & acquisition']]};
+let role='Teacher',page='checkin',token,prevToken,left=60,ses={in:null,out:null,fails:0,msg:''},reg={},locked=null,log=[],sel=null,month='oct',fsubj='All',mkt={Chemistry:[900,6],Biology:[700,4],English:[1100,0]};
+const toMin=v=>{const[a,b]=v.split(':');return +a*60+ +b},fmt=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const toast=t=>{const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e.t);e.t=setTimeout(()=>e.style.display='none',3500)};
+const newTok=()=>{prevToken=token;token='R3-'+Math.random().toString(36).slice(2,8).toUpperCase();left=60};newTok();
+function risk(s){const f=[];let v=0;if(s.abs){v+=40*Math.min(s.abs/3,1);f.push(s.abs+' consecutive absence(s)')}if(s.neg>.5){v+=25;f.push('Low feedback to most teachers')}
+ if(s.circ){v+=20;f.push('Circumstance: '+s.circ)}if(s.debt){v+=15;f.push('Unpaid tuition')}v=Math.round(v);return{v,lvl:v>=60?'High':v>=30?'Medium':'Low',f}}
+function kpi(t,m){const i=m==='oct'?t.prev:t.cur,k=KEYS.filter(x=>i[x]!=null),tw=k.reduce((a,x)=>a+weights[x],0);
+ return{score:Math.round(k.reduce((a,x)=>a+i[x]*weights[x],0)/tw),i,k,tw,tag:m==='nov'?'Provisional':k.length<7?'Partial':'Final'}}
+function setRole(r){role=r;page=NAV[r][0][0];draw()}
+function draw(){$('#role').innerHTML=Object.keys(NAV).map(r=>`<option ${r==role?'selected':''}>${r}</option>`).join('');$('#who').textContent=users[role];
+ $('#nav').innerHTML=NAV[role].map(([k,l])=>`<button class="${k==page?'on':''}" onclick="page='${k}';draw()">${l}</button>`).join('');
+ $('#main').innerHTML=P[page]();if(page==='checkin')drawQR()}
+function drawQR(){const c=$('#qr');if(!c)return;const n=25,x=c.getContext('2d');c.width=c.height=n;x.fillStyle='#fff';x.fillRect(0,0,n,n);let h=0;for(const ch of token)h=(h*31+ch.charCodeAt(0))>>>0;
+ const r=()=>(h=(h*1664525+1013904223)>>>0)/4294967296;x.fillStyle='#111';for(let i=0;i<n;i++)for(let j=0;j<n;j++){const f=(a,b)=>i>=a&&i<a+7&&j>=b&&j<b+7,e=(a,b)=>f(a,b)&&!(i>a&&i<a+6&&j>b&&j<b+6)||i>a+1&&i<a+5&&j>b+1&&j<b+5&&f(a,b);
+ if(f(0,0)||f(0,n-7)||f(n-7,0))e(0,0)||e(0,n-7)||e(n-7,0)?x.fillRect(j,i,1,1):0;else if(r()>.52)x.fillRect(j,i,1,1)}}
+setInterval(()=>{left--;if(left<=0)newTok();const e=$('#cd');if(e){e.textContent=left;if(left===60)drawQR()}},1000);
+const msg=(k,t,b)=>{ses.msg=`<div class="msg ${k}"><b>${t}</b><br>${b}</div>`;draw()};
+function scan(old){const t=toMin($('#tin').value);if(old||ses.in!=null&&0){ses.fails++;return msg('bad','Code expired or invalid',`Scan the code currently shown on the room screen. Failed attempts: ${ses.fails}/3.`+(ses.fails>=3?' Ask the administrator to confirm attendance manually.':''))}
+ if(ses.in!=null)return msg('warn','Already checked in',`Your check-in at ${fmt(ses.in)} is saved. No duplicate record was created.`);
+ if(t<870||t>930)return msg('bad','Outside the check-in window','Check-in opens 30 minutes before and closes 30 minutes after the lesson starts (15:00).');
+ ses.in=t;ses.late=Math.max(0,t-900);log.push({who:users.Teacher,time:fmt(t),how:'QR',st:ses.late>10?'Late ('+ses.late+' min)':'On time'});
+ msg(ses.late>10?'warn':'ok','Checked in - '+(ses.late>10?'Late ('+ses.late+' min)':'On time'),`Chemistry DTM-A, Room 3, ${fmt(t)}. A work session is now open.`)}
+function out(){const t=toMin($('#tout').value),w=t-ses.in,ot=Math.max(0,t-990);ses.out=t;T[0].wk+=+(w/60).toFixed(1);
+ msg(t<990?'warn':'ok',t<990?'Left early':'Checked out',`Worked ${Math.floor(w/60)} h ${w%60} min.`+(ot?` Overtime: ${ot} min.`:'')+(t<990?` Shortfall: ${990-t} min.`:''))}
+function setSt(id,v){reg[id]=v;draw()}
+function submitReg(){const m=S.filter(s=>s.grp==='Chem DTM-A'&&s.st==='active');if(m.some(s=>!reg[s.id]))return draw();
+ m.forEach(s=>{const v=reg[s.id];if(v==='A')s.abs++;else if(v==='P'||v==='L')s.abs=0;if(s.abs>=3&&!alerts.some(a=>a.sid===s.id&&a.st!=='Resolved'&&!a.st.startsWith('Closed'))){alerts.push({sid:s.id,why:s.abs+' consecutive absences',st:'Open',act:null});toast('Dropout alert raised for '+s.name+' - sent to Administrator and Head Specialist.')}});
+ locked=new Date().toTimeString().slice(0,5);draw()}
+const lv=(s,x)=>`<span class="badge ${x}">${x}</span>`;
+const P={
+checkin:()=>`<h2>Check in / out</h2><p class="sub">Today: Chemistry DTM-A, Room 3, 15:00-16:30</p><div class="grid g2">
+<div class="card"><b>Your phone (EduTizim app)</b><label>Simulated time - check-in</label><input id="tin" type="time" value="14:52">
+<p><button class="btn" onclick="scan()" ${ses.in!=null?'':''}>Scan room code</button> <button class="btn alt" onclick="scan(1)">Scan an old code (test)</button></p>
+<label>Simulated time - check-out</label><input id="tout" type="time" value="16:42"><p><button class="btn" onclick="out()" ${ses.in==null||ses.out!=null?'disabled':''}>Scan to check out</button></p>${ses.msg}</div>
+<div class="tablet"><div class="qr"><canvas id="qr"></canvas></div><p><b>Room 3</b><br>Code changes in <span id="cd">${left}</span> s</p><small>Classroom tablet - shows a signed room ID and a time stamp only</small></div></div>`,
+register:()=>{const m=S.filter(s=>s.grp==='Chem DTM-A'&&s.st==='active');if(!Object.keys(reg).length)m.forEach((s,i)=>{if(i<3)reg[s.id]='P'});const miss=m.filter(s=>!reg[s.id]).length;
+ return`<h2>Lesson register</h2><p class="sub">Chemistry DTM-A - students who scanned are pre-filled</p><div class="card"><table><tr><th>Student</th><th>Status</th><th>Absence run</th></tr>`+
+ m.map(s=>`<tr class="${locked==null&&!reg[s.id]&&submitTried()?'hl':''}"><td>${s.name}</td><td class="seg">${[['P','Present'],['L','Late'],['A','Absent'],['E','Excused']].map(([k,l])=>`<button class="${reg[s.id]===k?'on '+k:''}" ${locked?'disabled':''} onclick="setSt(${s.id},'${k}')">${l}</button>`).join('')}${reg[s.id]?'':' <span class="muted">Not scanned</span>'}</td><td>${s.abs}</td></tr>`).join('')+
+ `</table><p>${locked?`<span class="badge ok">Register locked at ${locked}</span> Absence runs updated; 3 in a row raises a dropout alert.`:`<button class="btn" onclick="tried=1;submitReg()">Submit register</button> ${miss&&tried?`<span class="badge bad">${miss} student(s) still have no status</span>`:''}`}</p><p class="muted">Tip: mark Aziza Nurmatova Absent (already 2 in a row) to trigger an alert.</p></div>`},
+risk:()=>{const A=S.filter(s=>s.st==='active'&&(fsubj==='All'||s.subj===fsubj)).map(s=>({s,r:risk(s)})).sort((a,b)=>b.r.v-a.r.v),c=l=>A.filter(x=>x.r.lvl===l).length,wd=S.filter(s=>s.st==='withdrawn').length,ac=S.filter(s=>s.st==='active').length;
+ const st=s=>(alerts.find(a=>a.sid===s.id)||{st:'-'}).st;
+ return`<h2>Dropout risk dashboard</h2><p class="sub">Risk score uses absences, feedback, recorded circumstances and unpaid tuition.</p><div class="grid g4"><div class="tile"><b>${c('High')}</b>High risk</div><div class="tile"><b>${c('Medium')}</b>Medium risk</div><div class="tile"><b>${alerts.filter(a=>a.st=='Open'||a.st=='In progress').length}</b>Open alerts</div><div class="tile"><b>${(wd/(wd+ac)*100).toFixed(1)}%</b>Dropout rate this month</div></div>
+ <div class="card" style="margin-top:16px"><label>Subject</label><select onchange="fsubj=this.value;draw()">${['All',...SUBJ].map(x=>`<option ${x==fsubj?'selected':''}>${x}</option>`).join('')}</select>
+ <table><tr><th>Student</th><th>Subject / group</th><th>Absences</th><th>Risk</th><th>Alert</th></tr>${A.map(({s,r})=>`<tr class="row ${sel===s.id?'sel':''}" onclick="sel=${s.id};draw()"><td>${s.name}</td><td>${s.subj} / ${s.grp}</td><td>${s.abs}</td><td><div style="display:flex;gap:8px;align-items:center"><div class="bar"><i style="width:${r.v}%"></i></div>${lv(0,r.lvl)} ${r.v}</div></td><td>${st(s)}</td></tr>`).join('')}</table></div>${sel?detail():''}`},
+kpi:()=>{const R=T.map(t=>({t,k:kpi(t,month)})).sort((a,b)=>b.k.score-a.k.score);
+ return`<h2>Teacher KPI dashboard</h2><p class="sub">Each indicator is scored 0-100, multiplied by its weight and summed.</p><div class="card"><label>Month</label><select onchange="month=this.value;draw()"><option value="oct" ${month=='oct'?'selected':''}>October 2026 (closed)</option><option value="nov" ${month=='nov'?'selected':''}>November 2026 (month to date)</option></select>
+ <button class="btn alt" style="float:right" onclick="exportKpi()">Export CSV</button><table><tr><th>#</th><th>Teacher</th><th>Role</th>${KEYS.map(k=>`<th title="${LBL[k]}">${LBL[k].split(' ')[0]}</th>`).join('')}<th>KPI</th><th>Status</th></tr>
+ ${R.map((x,i)=>`<tr class="row ${sel==='t'+x.t.id?'sel':''}" onclick="sel='t${x.t.id}';draw()"><td>${i+1}</td><td>${x.t.name}<br><span class="muted">${x.t.subj}</span></td><td>${x.t.role}</td>${KEYS.map(k=>`<td>${x.k.i[k]==null?'-':x.k.i[k]}</td>`).join('')}<td><b>${x.k.score}</b></td><td><span class="badge ${x.k.tag=='Final'?'ok':'warn'}">${x.k.tag}</span></td></tr>`).join('')}</table></div>${typeof sel==='string'?kdetail():''}`},
+weights:()=>{const sum=KEYS.reduce((a,k)=>a+weights[k],0);
+ return`<h2>KPI weights &amp; monthly ratings</h2><p class="sub">Weights must total 100%. New weights apply from next month.</p><div class="grid g2"><div class="card"><b>Indicator weights (%)</b>${KEYS.map(k=>`<label>${LBL[k]}</label><input type="number" min="0" max="100" value="${weights[k]}" oninput="weights['${k}']=+this.value;wsum()">`).join('')}
+ <p><span id="wsum" class="badge ${sum==100?'ok':'bad'}">Total ${sum}%</span> <button class="btn" onclick="saveW()">Save weights</button></p></div>
+ <div class="card"><b>November rating (0-10)</b>${T.map(t=>`<label>${t.name}</label><input type="number" step="0.5" value="${t.cur.rating==null?'':t.cur.rating/10}" onchange="rate(${t.id},this)">`).join('')}</div></div>`},
+workload:()=>`<h2>Workload report</h2><p class="sub">Hours come from QR check-in/out, not Excel. Planned hours come from the EduTizim timetable.</p><div class="card"><table><tr><th>Teacher</th><th>Role</th><th>Planned h</th><th>Worked h</th><th>Overtime h</th><th>Late arrivals</th><th>Missing check-outs</th></tr>
+ ${T.map(t=>`<tr><td>${t.name}</td><td>${t.role}</td><td>${t.pl}</td><td>${t.wk}</td><td>${Math.max(0,+(t.wk-t.pl).toFixed(1))}</td><td>${t.late}</td><td>${t.miss?`<span class="badge warn">${t.miss}</span>`:0}</td></tr>`).join('')}</table></div>`,
+retention:()=>`<h2>Retention &amp; acquisition</h2><p class="sub">Dropout rate by subject and acquisition cost per new student.</p><div class="grid g2"><div class="card"><b>Dropout rate by subject</b><table><tr><th>Subject</th><th>Active</th><th>Left</th><th>Rate</th></tr>${SUBJ.map(j=>{const a=S.filter(s=>s.subj===j&&s.st==='active').length,l=S.filter(s=>s.subj===j&&s.st==='withdrawn').length;return`<tr><td>${j}</td><td>${a}</td><td>${l}</td><td>${(l/(a+l)*100).toFixed(1)}%</td></tr>`}).join('')}</table></div>
+ <div class="card"><b>Acquisition cost per new student (USD)</b><table><tr><th>Subject</th><th>Spend</th><th>New students</th><th>Cost</th></tr>${SUBJ.map(j=>`<tr><td>${j}</td><td>${mkt[j][0]}</td><td>${mkt[j][1]}</td><td>${mkt[j][1]?(mkt[j][0]/mkt[j][1]).toFixed(0):'No enrolments'}</td></tr>`).join('')}</table></div></div>`,
+admin:()=>`<h2>Manual attendance &amp; marketing spend</h2><p class="sub">Use manual confirmation only when a scan fails three times or the teacher has no phone or internet.</p><div class="grid g2"><div class="card"><b>Confirm attendance manually</b>
+ <label>Person</label><select id="mp">${T.map(t=>`<option>${t.name}</option>`).join('')}</select><label>Time</label><input id="mt" type="time" value="15:02"><label>Reason (required)</label><input id="mr" placeholder="e.g. phone battery dead" style="width:100%">
+ <p><button class="btn" onclick="manual()">Save as Manual</button></p>${log.map(l=>`<p>${l.time} ${l.who} - ${l.how} - ${l.st}</p>`).join('')}</div>
+ <div class="card"><b>Marketing spend this month (USD)</b>${SUBJ.map(j=>`<label>${j}</label><input type="number" value="${mkt[j][0]}" onchange="mkt['${j}'][0]=+this.value;toast('Saved')">`).join('')}<p class="muted">Acquisition cost appears on the Director's Retention page.</p></div></div>`};
+let tried=0;const submitTried=()=>tried;
+function detail(){const s=S.find(x=>x.id===sel),r=risk(s),a=alerts.find(x=>x.sid===s.id);
+ return`<div class="card"><b>${s.name}</b> ${lv(0,r.lvl)} score ${r.v}<ul>${r.f.map(x=>`<li>${x}</li>`).join('')||'<li>No risk factors</li>'}</ul>${a?`<p>Alert: ${a.why} - <b>${a.st}</b>${a.act?'<br>Follow-up: '+a.act:''}</p>`:''}
+ <label>Assign follow-up to</label><select id="who2"><option>Administrator - Gulbahor</option><option>Head Specialist - Rustam</option></select><label>Action and due date</label><input id="act" value="Call parent" style="width:240px"> <input id="due" type="date" value="2026-11-27">
+ <p><button class="btn" onclick="follow('In progress')">Assign follow-up</button> <button class="btn alt" onclick="follow('Resolved')">Student returned</button> <button class="btn bad" onclick="follow('Closed - withdrawn')">Student left</button></p></div>`}
+function follow(st){const s=S.find(x=>x.id===sel);let a=alerts.find(x=>x.sid===s.id);if(!a){a={sid:s.id,why:'Raised by Director',st:'Open'};alerts.push(a)}
+ a.st=st;a.act=st==='In progress'?`${$('#act').value} - ${$('#who2').value}, due ${$('#due').value}`:null;if(st.startsWith('Closed'))s.st='withdrawn';toast('Alert set to '+st);sel=null;draw()}
+function kdetail(){const t=T.find(x=>'t'+x.id===sel),k=kpi(t,month);
+ return`<div class="card"><b>${t.name} - KPI ${k.score} (${k.tag})</b>${k.tag=='Partial'?'<p class="muted">Indicators that do not apply are left out and their weight is shared among the others.</p>':''}${k.k.map(x=>`<p style="margin:6px 0">${LBL[x]} (weight ${(weights[x]/k.tw*100).toFixed(0)}%)<span class="bar"><i style="width:${k.i[x]}%"></i></span></p>`).join('')}</div>`}
+function exportKpi(){const rows=['Teacher,Subject,Role,KPI,Status',...T.map(t=>{const k=kpi(t,month);return[t.name,t.subj,t.role,k.score,k.tag].join(',')})];
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));a.download='teacher_kpi_'+month+'.csv';a.click()}
+function wsum(){const s=KEYS.reduce((a,k)=>a+weights[k],0),e=$('#wsum');e.textContent='Total '+s+'%';e.className='badge '+(s==100?'ok':'bad')}
+function saveW(){KEYS.reduce((a,k)=>a+weights[k],0)==100?toast('Weights saved. They apply from next month.'):toast('Weights must add up to 100% before saving.')}
+function rate(id,e){const v=+e.value;if(e.value===''||v<0||v>10){e.value='';return toast('Rating must be between 0 and 10.')}T.find(t=>t.id===id).cur.rating=v*10;toast('Rating saved')}
+function manual(){const r=$('#mr').value.trim();if(!r)return toast('A reason is required for manual confirmation.');log.push({who:$('#mp').value,time:$('#mt').value,how:'Manual by Admin ('+r+')',st:'Saved'});draw()}
+const snap=()=>({weights,alerts,S,T,reg,locked,log,mkt,ses});
+const load=o=>{weights=o.weights;alerts.length=0;alerts.push(...o.alerts);S.length=0;S.push(...o.S);T.length=0;T.push(...o.T);reg=o.reg;locked=o.locked;log=o.log;mkt=o.mkt;ses=o.ses};
+const save=()=>fetch('/api/state',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(snap())}).catch(()=>{});
+const _draw=draw;draw=function(){_draw();save()};
+const resetDemo=()=>fetch('/api/reset',{method:'POST'}).then(()=>location.reload()).catch(()=>location.reload());
+fetch('/api/state').then(r=>r.ok?r.json():null).then(o=>{if(o&&o.S)load(o);draw()}).catch(()=>draw());
+</script></body></html>
