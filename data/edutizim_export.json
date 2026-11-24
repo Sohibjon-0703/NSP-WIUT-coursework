@@ -1,0 +1,1228 @@
+{
+ "source": "EduTizim CRM - daily export (prototype sample)",
+ "note": "Dates are relative to the import day so the demo always looks current.",
+ "rooms": [
+  {
+   "id": 1,
+   "name": "Room 1"
+  },
+  {
+   "id": 2,
+   "name": "Room 2"
+  },
+  {
+   "id": 3,
+   "name": "Room 3"
+  },
+  {
+   "id": 4,
+   "name": "Room 4 (support)"
+  }
+ ],
+ "teachers": [
+  {
+   "id": 1,
+   "name": "Dilnoza Karimova",
+   "subject": "Chemistry",
+   "type": "Main",
+   "phone": "+998 90 111 22 01"
+  },
+  {
+   "id": 2,
+   "name": "Jasur Rakhimov",
+   "subject": "Biology",
+   "type": "Main",
+   "phone": "+998 90 111 22 02"
+  },
+  {
+   "id": 3,
+   "name": "Malika Yusupova",
+   "subject": "English",
+   "type": "Main",
+   "phone": "+998 90 111 22 03"
+  },
+  {
+   "id": 4,
+   "name": "Sardor Abdullaev",
+   "subject": "English",
+   "type": "Main",
+   "phone": "+998 90 111 22 04"
+  },
+  {
+   "id": 5,
+   "name": "Nodira Sattorova",
+   "subject": "Chemistry",
+   "type": "Support",
+   "phone": "+998 90 111 22 05"
+  },
+  {
+   "id": 6,
+   "name": "Bobur Ismoilov",
+   "subject": "Biology",
+   "type": "Support",
+   "phone": "+998 90 111 22 06"
+  }
+ ],
+ "staff": [
+  {
+   "id": 7,
+   "name": "Gulbahor Tashpulatova",
+   "role": "Administrator"
+  },
+  {
+   "id": 8,
+   "name": "Rustam Saidov",
+   "role": "HeadSpecialist"
+  },
+  {
+   "id": 9,
+   "name": "Otabek Maksudov",
+   "role": "Director"
+  }
+ ],
+ "groups": [
+  {
+   "id": 1,
+   "name": "Chem DTM-A",
+   "subject": "Chemistry",
+   "teacher_id": 1,
+   "support_teacher_id": 5,
+   "room_id": 3,
+   "days": [
+    0,
+    2,
+    4
+   ],
+   "start": "15:00",
+   "end": "16:30",
+   "capacity": 15,
+   "support": {
+    "days": [
+     1,
+     3
+    ],
+    "start": "17:00",
+    "end": "18:00",
+    "room_id": 4
+   }
+  },
+  {
+   "id": 2,
+   "name": "Chem DTM-B",
+   "subject": "Chemistry",
+   "teacher_id": 1,
+   "support_teacher_id": 5,
+   "room_id": 3,
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "start": "10:00",
+   "end": "11:30",
+   "capacity": 15,
+   "support": {
+    "days": [
+     5
+    ],
+    "start": "12:00",
+    "end": "13:00",
+    "room_id": 4
+   }
+  },
+  {
+   "id": 3,
+   "name": "Bio DTM-A",
+   "subject": "Biology",
+   "teacher_id": 2,
+   "support_teacher_id": 6,
+   "room_id": 2,
+   "days": [
+    0,
+    2,
+    4
+   ],
+   "start": "14:00",
+   "end": "15:30",
+   "capacity": 15,
+   "support": {
+    "days": [
+     1,
+     3
+    ],
+    "start": "16:00",
+    "end": "17:00",
+    "room_id": 4
+   }
+  },
+  {
+   "id": 4,
+   "name": "Bio DTM-B",
+   "subject": "Biology",
+   "teacher_id": 2,
+   "support_teacher_id": 6,
+   "room_id": 2,
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "start": "16:00",
+   "end": "17:30",
+   "capacity": 15,
+   "support": {
+    "days": [
+     0,
+     2
+    ],
+    "start": "18:00",
+    "end": "19:00",
+    "room_id": 4
+   }
+  },
+  {
+   "id": 5,
+   "name": "IELTS-C",
+   "subject": "English",
+   "teacher_id": 3,
+   "support_teacher_id": null,
+   "room_id": 1,
+   "days": [
+    0,
+    2,
+    4
+   ],
+   "start": "16:00",
+   "end": "17:30",
+   "capacity": 12
+  },
+  {
+   "id": 6,
+   "name": "IELTS-D",
+   "subject": "English",
+   "teacher_id": 4,
+   "support_teacher_id": null,
+   "room_id": 1,
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "start": "14:00",
+   "end": "15:30",
+   "capacity": 12
+  },
+  {
+   "id": 7,
+   "name": "IELTS-E",
+   "subject": "English",
+   "teacher_id": 3,
+   "support_teacher_id": null,
+   "room_id": 1,
+   "days": [
+    1,
+    3,
+    5
+   ],
+   "start": "10:00",
+   "end": "11:30",
+   "capacity": 12
+  }
+ ],
+ "students": [
+  {
+   "id": 101,
+   "name": "Aziza Nurmatova",
+   "group_id": 1,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -5,
+    "day": 13
+   },
+   "consecutive_absences": 2,
+   "debt": true
+  },
+  {
+   "id": 102,
+   "name": "Timur Olimov",
+   "group_id": 1,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -3,
+    "day": 3
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 103,
+   "name": "Madina Qodirova",
+   "group_id": 1,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 12
+   },
+   "consecutive_absences": 1,
+   "debt": false
+  },
+  {
+   "id": 104,
+   "name": "Shahzod Matyaqubov",
+   "group_id": 1,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -3,
+    "day": 17
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 105,
+   "name": "Zarina Hasanova",
+   "group_id": 1,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -3,
+    "day": 3
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 106,
+   "name": "Akmal Rustamov",
+   "group_id": 1,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -9,
+    "day": 3
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 107,
+   "name": "Ulugbek Sobirov",
+   "group_id": 2,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 18
+   },
+   "consecutive_absences": 1,
+   "debt": false
+  },
+  {
+   "id": 108,
+   "name": "Ozoda Tursunova",
+   "group_id": 2,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -3,
+    "day": 19
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 109,
+   "name": "Sanjar Nazarov",
+   "group_id": 2,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -5,
+    "day": 10
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 110,
+   "name": "Komila Tursunova",
+   "group_id": 2,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -7,
+    "day": 18
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 111,
+   "name": "Javohir Tursunov",
+   "group_id": 2,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 12
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 112,
+   "name": "Nigora Sultonova",
+   "group_id": 2,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 16
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 113,
+   "name": "Ulugbek Abdullayev",
+   "group_id": 2,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 12
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 114,
+   "name": "Shahnoza Nazarova",
+   "group_id": 2,
+   "level": "Grade 10",
+   "enrolled": {
+    "days_ago": 9
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 115,
+   "name": "Gulshan Bakirova",
+   "group_id": 2,
+   "level": "Grade 11",
+   "enrolled": {
+    "days_ago": 16
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 116,
+   "name": "Javohir Abdullayev",
+   "group_id": 3,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 14
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 117,
+   "name": "Nigora Rustamova",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 11
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 118,
+   "name": "Mirjalol Ismoilov",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 3
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 119,
+   "name": "Abbos Ismoilov",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 2
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 120,
+   "name": "Elyor Sultonov",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 10
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 121,
+   "name": "Bobur Yusupov",
+   "group_id": 3,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 6
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 122,
+   "name": "Nilufar Yuldasheva",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "days_ago": 5
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 123,
+   "name": "Sevinch Ergasheva",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "days_ago": 12
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 124,
+   "name": "Laylo Davletova",
+   "group_id": 4,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 3
+   },
+   "consecutive_absences": 3,
+   "debt": true,
+   "circumstance": "Parent reported job loss"
+  },
+  {
+   "id": 125,
+   "name": "Otabek Jalilov",
+   "group_id": 4,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 13
+   },
+   "consecutive_absences": 0,
+   "debt": true
+  },
+  {
+   "id": 126,
+   "name": "Rustam Polvonov",
+   "group_id": 4,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -7,
+    "day": 5
+   },
+   "consecutive_absences": 1,
+   "debt": true
+  },
+  {
+   "id": 127,
+   "name": "Otabek Xolmatov",
+   "group_id": 4,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -9,
+    "day": 12
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 128,
+   "name": "Asadbek Nazarov",
+   "group_id": 4,
+   "level": "Grade 10",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 6
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 129,
+   "name": "Munisa Yusupova",
+   "group_id": 4,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -5,
+    "day": 9
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 130,
+   "name": "Feruza Hamidova",
+   "group_id": 4,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 20
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 131,
+   "name": "Sevara Karimova",
+   "group_id": 4,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 5
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": 0,
+    "day": 9,
+    "reason": "Financial",
+    "note": "Family could not pay November tuition"
+   }
+  },
+  {
+   "id": 132,
+   "name": "Kamola Ergasheva",
+   "group_id": 5,
+   "level": "B1",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 25
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "negative_feedback": true
+  },
+  {
+   "id": 133,
+   "name": "Otabek Jumayev",
+   "group_id": 5,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -9,
+    "day": 13
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 134,
+   "name": "Nodira Rahimova",
+   "group_id": 5,
+   "level": "B2",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 7
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 135,
+   "name": "Sabina Abdullayeva",
+   "group_id": 5,
+   "level": "B1",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 1
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 136,
+   "name": "Otabek Tursunov",
+   "group_id": 5,
+   "level": "Intermediate",
+   "enrolled": {
+    "month_offset": -3,
+    "day": 3
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 137,
+   "name": "Mirjalol Jumayev",
+   "group_id": 5,
+   "level": "B2",
+   "enrolled": {
+    "month_offset": -7,
+    "day": 12
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 138,
+   "name": "Doniyor Aliev",
+   "group_id": 5,
+   "level": "Intermediate",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 4
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": 0,
+    "day": 14,
+    "reason": "Moved away",
+    "note": "Family moved to Tashkent"
+   }
+  },
+  {
+   "id": 139,
+   "name": "Behruz Sobirov",
+   "group_id": 6,
+   "level": "B1",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 15
+   },
+   "consecutive_absences": 1,
+   "debt": false
+  },
+  {
+   "id": 140,
+   "name": "Gulnoza Aminova",
+   "group_id": 6,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 10
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 141,
+   "name": "Jamshid Sobirov",
+   "group_id": 6,
+   "level": "B1",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 17
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 142,
+   "name": "Komila Yusupova",
+   "group_id": 6,
+   "level": "Intermediate",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 23
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 143,
+   "name": "Nodirbek Mirzayev",
+   "group_id": 6,
+   "level": "B2",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 25
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 144,
+   "name": "Komila Olimova",
+   "group_id": 6,
+   "level": "Intermediate",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 20
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 145,
+   "name": "Sherzod Nazarov",
+   "group_id": 6,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 7
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 146,
+   "name": "Charos Mirzayeva",
+   "group_id": 7,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 12
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 147,
+   "name": "Sabina Nazarova",
+   "group_id": 7,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 11
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 148,
+   "name": "Charos Matyaqubova",
+   "group_id": 7,
+   "level": "B1",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 21
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 149,
+   "name": "Nigora Tursunova",
+   "group_id": 7,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 16
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 150,
+   "name": "Nodira Bakirova",
+   "group_id": 7,
+   "level": "Upper-intermediate",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 24
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 151,
+   "name": "Feruza Yusupova",
+   "group_id": 7,
+   "level": "B2",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 21
+   },
+   "consecutive_absences": 0,
+   "debt": false
+  },
+  {
+   "id": 152,
+   "name": "Charos Ismoilova",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -5,
+    "day": 5
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -1,
+    "day": 20,
+    "reason": "Not satisfied",
+    "note": ""
+   }
+  },
+  {
+   "id": 153,
+   "name": "Sabina Olimova",
+   "group_id": 6,
+   "level": "B2",
+   "enrolled": {
+    "month_offset": -4,
+    "day": 14
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -1,
+    "day": 9,
+    "reason": "Changed course",
+    "note": ""
+   }
+  },
+  {
+   "id": 154,
+   "name": "Madina Nazarova",
+   "group_id": 4,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 9
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -2,
+    "day": 20,
+    "reason": "Financial",
+    "note": ""
+   }
+  },
+  {
+   "id": 155,
+   "name": "Bobur Bakirov",
+   "group_id": 7,
+   "level": "B2",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 17
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -3,
+    "day": 7,
+    "reason": "Moved away",
+    "note": ""
+   }
+  },
+  {
+   "id": 156,
+   "name": "Mirjalol Yusupov",
+   "group_id": 1,
+   "level": "Grade 11",
+   "enrolled": {
+    "month_offset": -6,
+    "day": 6
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -3,
+    "day": 7,
+    "reason": "Financial",
+    "note": ""
+   }
+  },
+  {
+   "id": 157,
+   "name": "Madina Olimova",
+   "group_id": 5,
+   "level": "B1",
+   "enrolled": {
+    "month_offset": -8,
+    "day": 4
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -3,
+    "day": 20,
+    "reason": "Other",
+    "note": ""
+   }
+  },
+  {
+   "id": 158,
+   "name": "Dildora Karimova",
+   "group_id": 2,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -9,
+    "day": 11
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -4,
+    "day": 22,
+    "reason": "Changed course",
+    "note": ""
+   }
+  },
+  {
+   "id": 159,
+   "name": "Madina Rustamova",
+   "group_id": 6,
+   "level": "Intermediate",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 17
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -5,
+    "day": 10,
+    "reason": "Not satisfied",
+    "note": ""
+   }
+  },
+  {
+   "id": 160,
+   "name": "Sabina Jumayeva",
+   "group_id": 3,
+   "level": "School leaver",
+   "enrolled": {
+    "month_offset": -10,
+    "day": 11
+   },
+   "consecutive_absences": 0,
+   "debt": false,
+   "withdrawn": {
+    "month_offset": -5,
+    "day": 5,
+    "reason": "Financial",
+    "note": ""
+   }
+  }
+ ],
+ "monthly_aggregates": {
+  "1": {
+   "-6": {
+    "results": 81,
+    "attendance": 91
+   },
+   "-5": {
+    "results": 86,
+    "attendance": 92
+   },
+   "-4": {
+    "results": 81,
+    "attendance": 91
+   },
+   "-3": {
+    "results": 84,
+    "attendance": 88
+   },
+   "-2": {
+    "results": 86,
+    "attendance": 93
+   },
+   "-1": {
+    "results": 80,
+    "attendance": 93
+   },
+   "0": {
+    "results": 81,
+    "attendance": 90
+   }
+  },
+  "2": {
+   "-6": {
+    "results": 79,
+    "attendance": 86
+   },
+   "-5": {
+    "results": 72,
+    "attendance": 84
+   },
+   "-4": {
+    "results": 75,
+    "attendance": 83
+   },
+   "-3": {
+    "results": 72,
+    "attendance": 83
+   },
+   "-2": {
+    "results": 76,
+    "attendance": 81
+   },
+   "-1": {
+    "results": 74,
+    "attendance": 84
+   },
+   "0": {
+    "results": 69,
+    "attendance": 83
+   }
+  },
+  "3": {
+   "-6": {
+    "results": 93,
+    "attendance": 93
+   },
+   "-5": {
+    "results": 89,
+    "attendance": 96
+   },
+   "-4": {
+    "results": 94,
+    "attendance": 96
+   },
+   "-3": {
+    "results": 88,
+    "attendance": 92
+   },
+   "-2": {
+    "results": 87,
+    "attendance": 95
+   },
+   "-1": {
+    "results": 89,
+    "attendance": 91
+   },
+   "0": {
+    "results": 89,
+    "attendance": 95
+   }
+  },
+  "4": {
+   "-6": {
+    "results": 85,
+    "attendance": 86
+   },
+   "-5": {
+    "results": 79,
+    "attendance": 90
+   },
+   "-4": {
+    "results": 82,
+    "attendance": 88
+   },
+   "-3": {
+    "results": 78,
+    "attendance": 84
+   },
+   "-2": {
+    "results": 82,
+    "attendance": 87
+   },
+   "-1": {
+    "results": 77,
+    "attendance": 90
+   },
+   "0": {
+    "results": 81,
+    "attendance": 89
+   }
+  },
+  "5": {
+   "-6": {
+    "results": null,
+    "attendance": 88
+   },
+   "-5": {
+    "results": null,
+    "attendance": 92
+   },
+   "-4": {
+    "results": null,
+    "attendance": 87
+   },
+   "-3": {
+    "results": null,
+    "attendance": 92
+   },
+   "-2": {
+    "results": null,
+    "attendance": 90
+   },
+   "-1": {
+    "results": null,
+    "attendance": 89
+   },
+   "0": {
+    "results": null,
+    "attendance": 90
+   }
+  },
+  "6": {
+   "-6": {
+    "results": null,
+    "attendance": 82
+   },
+   "-5": {
+    "results": null,
+    "attendance": 78
+   },
+   "-4": {
+    "results": null,
+    "attendance": 77
+   },
+   "-3": {
+    "results": null,
+    "attendance": 79
+   },
+   "-2": {
+    "results": null,
+    "attendance": 77
+   },
+   "-1": {
+    "results": null,
+    "attendance": 77
+   },
+   "0": {
+    "results": null,
+    "attendance": 77
+   }
+  }
+ },
+ "marketing_spend": {
+  "months_back_to_current": {
+   "Chemistry": [
+    700,
+    800,
+    850,
+    750,
+    900,
+    900
+   ],
+   "Biology": [
+    600,
+    650,
+    700,
+    700,
+    650,
+    700
+   ],
+   "English": [
+    1200,
+    1000,
+    1100,
+    1050,
+    1150,
+    1100
+   ]
+  }
+ }
+}

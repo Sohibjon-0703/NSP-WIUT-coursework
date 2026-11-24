@@ -1,0 +1,4 @@
+nsp_data.db
+*.outbox.jsonl
+data/edutizim_outbox.jsonl
+__pycache__/

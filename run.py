@@ -1,54 +1,33 @@
-"""NSP Learning Centre - Teacher Workload, KPI and Retention module (prototype).
+"""NSP Learning Centre - Teacher Workload, KPI and Retention module (high-fidelity prototype).
 
-Run:  python run.py          (Python 3.8+, no packages to install)
-Then the browser opens at http://localhost:8000
+Run:  python run.py            (Python 3.8+, no packages to install)
+The browser opens at http://localhost:8000. Stop with Ctrl+C.
 """
-import json, sqlite3, threading, webbrowser, argparse
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from pathlib import Path
+import argparse
+import threading
+import webbrowser
+from http.server import ThreadingHTTPServer
 
-ROOT = Path(__file__).parent
-DB = ROOT / "nsp_data.db"
+from nsp import App, ROOT
+from nsp.controllers import make_handler
 
-def db():
-    con = sqlite3.connect(DB)
-    con.execute("CREATE TABLE IF NOT EXISTS app_state (id INTEGER PRIMARY KEY CHECK (id = 1), json TEXT NOT NULL)")
-    return con
 
-class Handler(BaseHTTPRequestHandler):
-    def _send(self, code, body=b"", ctype="application/json"):
-        self.send_response(code); self.send_header("Content-Type", ctype)
-        self.send_header("Content-Length", str(len(body))); self.end_headers(); self.wfile.write(body)
+def main() -> None:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--port", type=int, default=8000)
+    p.add_argument("--no-browser", action="store_true")
+    a = p.parse_args()
+    app = App()
+    server = ThreadingHTTPServer(("127.0.0.1", a.port), make_handler(app, ROOT / "static"))
+    url = "http://localhost:%d" % a.port
+    print("NSP module running at %s  (Ctrl+C to stop)" % url)
+    if not a.no_browser:
+        threading.Timer(0.6, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")
 
-    def do_GET(self):
-        if self.path == "/api/state":
-            with db() as con:
-                row = con.execute("SELECT json FROM app_state WHERE id = 1").fetchone()
-            return self._send(200, row[0].encode()) if row else self._send(404, b"{}")
-        if self.path in ("/", "/index.html"):
-            return self._send(200, (ROOT / "static" / "index.html").read_bytes(), "text/html; charset=utf-8")
-        self._send(404, b"Not found", "text/plain")
-
-    def do_POST(self):
-        if self.path == "/api/state":
-            data = self.rfile.read(int(self.headers.get("Content-Length", 0)))
-            json.loads(data)                      # reject invalid JSON
-            with db() as con:
-                con.execute("INSERT INTO app_state (id, json) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET json = excluded.json", (data.decode(),))
-            return self._send(200, b"{}")
-        if self.path == "/api/reset":
-            with db() as con:
-                con.execute("DELETE FROM app_state")
-            return self._send(200, b"{}")
-        self._send(404, b"Not found", "text/plain")
-
-    def log_message(self, *a): pass
 
 if __name__ == "__main__":
-    p = argparse.ArgumentParser(); p.add_argument("--port", type=int, default=8000); a = p.parse_args()
-    srv = ThreadingHTTPServer(("127.0.0.1", a.port), Handler)
-    url = f"http://localhost:{a.port}"
-    print(f"NSP module running at {url}  (Ctrl+C to stop)")
-    threading.Timer(0.6, lambda: webbrowser.open(url)).start()
-    try: srv.serve_forever()
-    except KeyboardInterrupt: print("\nStopped.")
+    main()
